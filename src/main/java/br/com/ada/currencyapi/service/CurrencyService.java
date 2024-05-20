@@ -70,7 +70,7 @@ public class CurrencyService {
 
     private boolean validateSavedInDb(Currency currency, ConvertCurrencyRequest request) {
         try{
-           return currency.getExchanges().containsKey(request.getTo());
+            return currency.getExchanges().containsKey(request.getTo());
         } catch (Exception e) {
             return false;
         }
@@ -81,7 +81,7 @@ public class CurrencyService {
         Map<String, ResponseAwesomeClient> response;
 
         try {
-             response = awesomeClient.get(coins).getBody();
+            response = awesomeClient.get(coins).getBody();
         } catch (Exception e) {
             String json = e.getMessage().replaceAll(".*?(\\{.*?\\}).*", "$1");
             throw new CoinNotFoundException("Error while getting response from Awesome API: " + json);
@@ -93,4 +93,3 @@ public class CurrencyService {
     }
 
 }
-
