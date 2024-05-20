@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  #nome do serviço
+  db-currency-api-postgres:
+    #imagem do banco de dados do postgres
+    image: postgres
+    container_name: db-currency-api
+    #variáveis de ambiente
+    environment:
+      POSTGRES_USER: "postgres"
+      #define a senha
+      POSTGRES_PASSWORD: "12345"
+    ports:
+        #exibe na porta 5432 da maquina e inicializa da 5432
+      - "5432:5432"
+    volumes:
+      #arquivo que vai ser anicializado pra criar o banco de dados
+      - ./db/create-db-currency-api.sql:/docker-entrypoint-initdb.d/create-db-currency-api.sql
+      #onde de vai ficar armazenado os dados do banco de dados do docker
+      - postgres_data:/var/lib/postgresql/data
+volumes:
+  postgres_data:
