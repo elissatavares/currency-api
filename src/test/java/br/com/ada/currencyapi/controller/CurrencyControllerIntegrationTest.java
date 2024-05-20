@@ -60,6 +60,8 @@ public class CurrencyControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andDo(print());
+        System.out.println(currencyRepository.findByName("EUR"));
+        System.out.println(currencyRepository.findByName("EUR").getExchanges());
     }
 
     @Test
