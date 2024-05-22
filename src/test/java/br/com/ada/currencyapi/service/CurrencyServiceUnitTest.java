@@ -107,7 +107,7 @@ public class CurrencyServiceUnitTest {
         // Configuração do Mock do Repository
         when(currencyRepository.findByName(any())).thenReturn(
                 Currency.builder()
-                        .exchanges(Map.of("EUR", BigDecimal.TWO))
+                        .exchanges(Map.of("EUR", BigDecimal.TEN))
                         .build());
 
         // Execução do método e verificação
@@ -118,7 +118,7 @@ public class CurrencyServiceUnitTest {
                 .build();
         ConvertCurrencyResponse response = currencyService.convert(request);
         verify(awesomeClient, never()).get(anyString());
-        assertThat(response.getAmount()).isEqualTo(new BigDecimal("20"));
+        assertThat(response.getAmount()).isEqualTo(new BigDecimal("100"));
     }
 
     @Test
@@ -135,11 +135,11 @@ public class CurrencyServiceUnitTest {
                 .builder()
                 .from("EUR")
                 .to("USD")
-                .amount(BigDecimal.TWO)
+                .amount(BigDecimal.TEN)
                 .build();
         ConvertCurrencyResponse response = currencyService.convert(request);
         verify(awesomeClient, times(1)).get(anyString());
-        assertThat(response.getAmount()).isEqualTo(new BigDecimal("10.00"));
+        assertThat(response.getAmount()).isEqualTo(new BigDecimal("50.00"));
     }
 
     @Test

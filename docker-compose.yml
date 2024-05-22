@@ -8,8 +8,8 @@ services:
     container_name: db-currency-api
     #variáveis de ambiente
     environment:
+      POSTGRES_DB: currency
       POSTGRES_USER: "postgres"
-      #define a senha
       POSTGRES_PASSWORD: "12345"
     ports:
         #exibe na porta 5432 da maquina e inicializa da 5432
