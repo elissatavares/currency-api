@@ -1,5 +1,3 @@
-CREATE DATABASE currency;
-
 \c currency;
 
 CREATE TABLE currency (

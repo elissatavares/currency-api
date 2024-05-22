@@ -87,7 +87,7 @@ public class CurrencyControllerIntegrationTest {
         assertEquals(0, currencyRepository.count());
 
         Map<String, BigDecimal> exchanges = new HashMap<>();
-        exchanges.put("USD", BigDecimal.TWO);
+        exchanges.put("USD", BigDecimal.TEN);
 
         currencyRepository.save(Currency.builder().name("EUR").exchanges(exchanges).build());
         assertEquals(1, currencyRepository.count());
@@ -102,7 +102,7 @@ public class CurrencyControllerIntegrationTest {
                                 .content(content)
                 )
                 .andExpectAll(status().isOk())
-                .andExpect(jsonPath("$.amount").value(10.00))
+                .andExpect(jsonPath("$.amount").value(50.00))
                 .andDo(print());
     }
 
