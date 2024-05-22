@@ -13,7 +13,7 @@ O projeto *Currency* é uma aplicação em Java desenvolvida ...
 
 ## Demonstração da documentação ☕
 
-<a href="https://ibb.co/zJC02N4"><img src="https://i.ibb.co/cLR78xr/swagger.gif" alt="swagger" border="0"></a>
+<a href="https://ibb.co/stfjHwx"><img src="https://i.ibb.co/g62yVTq/2024-05-22-09-46-46.gif" alt="2024-05-22-09-46-46" border="0" /></a>
 
 ## Configurando e inicializando o projeto ☕
 
@@ -32,17 +32,21 @@ Através do ssh
 Para essa próxima etapa é necessário ter o  `docker e docker compose` instalado e configurado.
 
 Na pasta currency-api execute o comando a seguir para inicializar o banco de dados.
+
 ```
     docker compose up
 ```
+<a href="https://ibb.co/pWytPZ3"><img src="https://i.ibb.co/SQrhx0K/2024-05-22-09-36-49.gif" alt="2024-05-22-09-36-49" border="0" /></a>
 
 Utilizamos o `Maven` para instalar todas as depedências utilizadas no projeto. Para executar um build do projeto use o comando:
 
 ```
     mvn clean install
 ```
+<a href="https://ibb.co/C1pqsHm"><img src="https://i.ibb.co/JBWNFsm/2024-05-22-09-37-42.gif" alt="2024-05-22-09-37-42" border="0" /></a>
 
 E, por fim, vá ate a classe  `CurrencyApiApplication` para iniciar o servidor no endereço: [http://localhost:8080](http://localhost:8080)
+<a href="https://ibb.co/MGDPkZ6"><img src="https://i.ibb.co/k9gq251/2024-05-22-09-41-17.gif" alt="2024-05-22-09-41-17" border="0" /></a>
 
 📕 Para consultar a através do Swagger-ui vá para a [Documentação no Swagger](http://localhost:8080/swagger-ui/index.html).
 
