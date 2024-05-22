@@ -9,22 +9,42 @@
 
 Projeto para o módulo de Testes Automatizados I do Santander Coders.
 
-O projeto *Currency* é uma aplicação em Java desenvolvida ...
+O projeto *Currency* é uma aplicação em Java desenvolvida para consumir a API [AwesomeAPI](https://docs.awesomeapi.com.br/)
 
-## Demonstração da documentação ☕
+## Testes e Cobertura ☕
 
-<a href="https://ibb.co/stfjHwx"><img src="https://i.ibb.co/g62yVTq/2024-05-22-09-46-46.gif" alt="2024-05-22-09-46-46" border="0" /></a>
+O projeto inclui testes automatizados utilizando as seguintes tecnologias e ferramentas:
+
+<ul>
+    <li>
+        <a href="https://junit.org/junit5/">
+            JUnit 5
+        </a>
+    </li>
+    <li>
+        <a href="https://site.mockito.org/">
+            Mockito
+        </a>
+    </li>
+    <li>
+        <a href="https://www.jacoco.org/jacoco/trunk/doc/">
+            JaCoCo
+        </a>
+    </li>
+
+</ul>
+
 
 ## Configurando e inicializando o projeto ☕
 
 Primeiramente deverá fazer o clone da aplicação em sua máquina:
 
-Através do https
+* Através do https
 ```
     git clone https://github.com/elissatavares/currency-api.git
 ```
 
-Através do ssh
+* Através do ssh
 ```
     git clone git@github.com:elissatavares/currency-api.git
 ```
@@ -36,19 +56,16 @@ Na pasta currency-api execute o comando a seguir para inicializar o banco de dad
 ```
     docker compose up
 ```
-<a href="https://ibb.co/pWytPZ3"><img src="https://i.ibb.co/SQrhx0K/2024-05-22-09-36-49.gif" alt="2024-05-22-09-36-49" border="0" /></a>
 
 Utilizamos o `Maven` para instalar todas as depedências utilizadas no projeto. Para executar um build do projeto use o comando:
 
 ```
-    mvn clean install
+    mvn clean verify
 ```
-<a href="https://ibb.co/C1pqsHm"><img src="https://i.ibb.co/JBWNFsm/2024-05-22-09-37-42.gif" alt="2024-05-22-09-37-42" border="0" /></a>
 
-E, por fim, vá ate a classe  `CurrencyApiApplication` para iniciar o servidor no endereço: [http://localhost:8080](http://localhost:8080)
-<a href="https://ibb.co/MGDPkZ6"><img src="https://i.ibb.co/k9gq251/2024-05-22-09-41-17.gif" alt="2024-05-22-09-41-17" border="0" /></a>
+E, por fim, vá até a classe  `CurrencyApiApplication` para iniciar o servidor no endereço: [http://localhost:8080](http://localhost:8080)
 
-📕 Para consultar a através do Swagger-ui vá para a [Documentação no Swagger](http://localhost:8080/swagger-ui/index.html).
+**📕 Para consultar a através do Swagger-ui vá para a [Documentação no Swagger](http://localhost:8080/swagger-ui/index.html).**
 
 
 ## Dependências ☕
@@ -102,8 +119,6 @@ E, por fim, vá ate a classe  `CurrencyApiApplication` para iniciar o servidor n
         </a>
     </li>
 </ul>
-
-
 
 
 ## 🤝 Colaboradores
