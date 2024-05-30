@@ -1,23 +1,44 @@
 version: "3.9"
 
 services:
-  #nome do serviço
-  db-currency-api-postgres:
-    #imagem do banco de dados do postgres
-    image: postgres
-    container_name: db-currency-api
-    #variáveis de ambiente
+  db:
+    build: ./db
+    container_name: db
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "currency-db", "-U", "postgres" ]
+      timeout: 5s #tempo da tentativa
+      interval: 5s #intervalo entre elas
+      retries: 3 #qtd
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: currency
+      POSTGRES_DB: currency-db
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "12345"
     ports:
-        #exibe na porta 5432 da maquina e inicializa da 5432
       - "5432:5432"
-    volumes:
-      #arquivo que vai ser anicializado pra criar o banco de dados
-      - ./db/create-db-currency-api.sql:/docker-entrypoint-initdb.d/create-db-currency-api.sql
-      #onde de vai ficar armazenado os dados do banco de dados do docker
-      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - rede
+
+  api:
+    build: .
+    container_name: api
+    image: currency-api
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/currency-db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 12345
+    ports:
+      #cada requisicao feita na 8080 da maquina vai ser redirecionada para 8080 do container
+      - "8080:8080"
+    networks:
+          - rede
+
+networks:
+  rede: {}
+
 volumes:
-  postgres_data:
+  postgres_data: {}

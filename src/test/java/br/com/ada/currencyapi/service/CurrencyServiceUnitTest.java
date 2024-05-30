@@ -143,7 +143,7 @@ public class CurrencyServiceUnitTest {
     }
 
     @Test
-    void TestConvertCurrencyWhenCurrencyNotFoundThrowCoinNotFoundException() {
+    void testConvertCurrencyWhenCurrencyNotFoundThrowCoinNotFoundException() {
         // Configuração do Mock do Repository e do AwesomeClient
         when(currencyRepository.findByName(any())).thenReturn(null);
         String json = "{\"status\":404,\"code\":\"CoinNotExists\",\"message\":\"moeda nao encontrada EU-USD\"}";
