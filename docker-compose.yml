@@ -35,10 +35,30 @@ services:
       #cada requisicao feita na 8080 da maquina vai ser redirecionada para 8080 do container
       - "8080:8080"
     networks:
-          - rede
+      - rede
+  sonarqube:
+    image: sonarqube:9.9.0-community
+    hostname: sonarqube
+    container_name: sonarqube
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/currency-db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 12345
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+    ports:
+      - "9000:9000"
+
 
 networks:
   rede: {}
 
 volumes:
   postgres_data: {}
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
