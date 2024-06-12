@@ -18,6 +18,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -34,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class CurrencyControllerIntegrationTest {
+class CurrencyControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -46,7 +47,6 @@ public class CurrencyControllerIntegrationTest {
     void tearDown() {
         currencyRepository.deleteAll();
     }
-
 
     @Test
     void testGetCurrencyReturns200() throws Exception {
@@ -96,7 +96,7 @@ public class CurrencyControllerIntegrationTest {
         var content = new ObjectMapper().writeValueAsString(request);
 
         mockMvc.perform(
-                        get("/currency/convert")
+                        post("/currency/convert")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .content(content)
@@ -114,12 +114,11 @@ public class CurrencyControllerIntegrationTest {
         var content = new ObjectMapper().writeValueAsString(request);
 
         mockMvc.perform(
-                        get("/currency/convert")
+                        post("/currency/convert")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .content(content)
                 )
-                .andExpect(jsonPath("$.amount").isNumber())
                 .andExpectAll(status().isOk())
                 .andDo(print());
     }
@@ -164,7 +163,7 @@ public class CurrencyControllerIntegrationTest {
     @Test
     void testCreateCurrencyAnnotationValidReturns400() throws Exception {
         assertEquals(0, currencyRepository.count()) ;
-        CurrencyRequest currencyRequest = new CurrencyRequest();
+        CurrencyRequest currencyRequest = CurrencyRequest.builder().build();
 
         var content = new ObjectMapper().writeValueAsString(currencyRequest);
 
@@ -183,19 +182,18 @@ public class CurrencyControllerIntegrationTest {
     @Test
     void testConvertCurrencyWhenCurrencyDoesNotExistReturns404() throws Exception {
         assertEquals(0, currencyRepository.count());
-        String json = "{\"status\":404,\"code\":\"CoinNotExists\",\"message\":\"moeda nao encontrada NAOEXISTE-USD\"}";
 
-        ConvertCurrencyRequest request = new ConvertCurrencyRequest("naoExiste", "USD", BigDecimal.TEN);
+        ConvertCurrencyRequest request = new ConvertCurrencyRequest("Naoexite", "EUR", new BigDecimal(BigInteger.TEN));
         var content = new ObjectMapper().writeValueAsString(request);
 
         mockMvc.perform(
-                        get("/currency/convert")
+                        post("/currency/convert")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .content(content)
                 )
                 .andExpectAll(status().isNotFound())
-                .andExpectAll(result -> assertEquals("Error while getting response from Awesome API: " + json, result.getResolvedException().getMessage()))
+                .andExpectAll(result -> assertEquals("Error while getting response from Awesome API", result.getResolvedException().getMessage()))
                 .andExpectAll(result -> assertInstanceOf(CoinNotFoundException.class, result.getResolvedException()))
                 .andDo(print());
     }

@@ -13,6 +13,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.List;
 
 import br.com.ada.currencyapi.domain.ConvertCurrencyRequest;
@@ -40,7 +42,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
-public class CurrencyControllerUnitTest {
+class CurrencyControllerUnitTest {
 
     @InjectMocks
     private CurrencyController currencyController;
@@ -55,6 +57,42 @@ public class CurrencyControllerUnitTest {
         mockMvc = MockMvcBuilders.standaloneSetup(currencyController).build();
     }
 
+    @Test
+    void convertCurrencyRequestValidation() throws Exception {
+        // Request com campos em branco e amount negativo
+        ConvertCurrencyRequest request = ConvertCurrencyRequest.builder()
+                .from("")
+                .to("")
+                .amount(new BigDecimal("-100.00"))
+                .build();
+        var content = new ObjectMapper().writeValueAsString(request);
+
+        // Envio da requisição POST para /currencies/convert
+        mockMvc.perform(
+                        post("/currency/convert")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .content(content)
+                )
+                .andExpect(status().isBadRequest());
+    }
+
+
+    @Test
+    void currencyRequestValidation() throws Exception {
+        // Criando um objeto CurrencyRequest com campo 'name' em branco
+        CurrencyRequest request = new CurrencyRequest("", "Description", new HashMap<>());
+        var content = new ObjectMapper().writeValueAsString(request);
+
+        // Envio da requisição POST para um endpoint fictício /currencies
+        mockMvc.perform(
+                        post("/currency")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .content(content)
+                )
+                .andExpect(status().isBadRequest());
+    }
 
     @Test
     void testGetCurrenciesReturns200() throws Exception {
@@ -95,18 +133,16 @@ public class CurrencyControllerUnitTest {
 
     @Test
     void testConvertCurrencyReturns200() throws Exception {
-        ConvertCurrencyResponse response = ConvertCurrencyResponse.builder()
-                .amount(BigDecimal.TEN)
-                .build();
+        ConvertCurrencyResponse response = new ConvertCurrencyResponse(BigDecimal.TEN);
+
         Mockito.when(currencyService.convert(any(ConvertCurrencyRequest.class))).thenReturn(response);
 
-        ConvertCurrencyRequest request = ConvertCurrencyRequest.builder()
-                .from("EUR")
-                .build();
+        ConvertCurrencyRequest request = new ConvertCurrencyRequest("USD", "EUR", new BigDecimal(BigInteger.TEN));
+
         var content = new ObjectMapper().writeValueAsString(request);
 
         mockMvc.perform(
-                        get("/currency/convert")
+                        post("/currency/convert")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .content(content)

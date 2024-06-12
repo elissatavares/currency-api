@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 
+@Builder
 public record CurrencyRequest(
         @NotBlank
         String name,

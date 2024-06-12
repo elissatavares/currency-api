@@ -1,6 +1,7 @@
 package br.com.ada.currencyapi.service;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
@@ -28,7 +29,7 @@ import br.com.ada.currencyapi.exception.CurrencyException;
 import br.com.ada.currencyapi.repository.CurrencyRepository;
 
 @ExtendWith(MockitoExtension.class)
-public class CurrencyServiceUnitTest {
+class CurrencyServiceUnitTest {
 
     @InjectMocks
     private CurrencyService currencyService;
@@ -59,8 +60,8 @@ public class CurrencyServiceUnitTest {
         List<CurrencyResponse> responses = currencyService.get();
         assertThat(responses).isNotNull()
                 .hasSize(2);
-        assertThat(responses.get(0).getLabel()).isEqualTo("1 - LCS");
-        assertThat(responses.get(1).getLabel()).isEqualTo("2 - YAS");
+        assertThat(responses.get(0).label()).isEqualTo("1 - LCS");
+        assertThat(responses.get(1).label()).isEqualTo("2 - YAS");
         verify(currencyRepository, times(1)).findAll();
     }
 
@@ -82,10 +83,10 @@ public class CurrencyServiceUnitTest {
         // Configuração do Mock do Repository
         when(currencyRepository.findByName(any())).thenReturn(Currency.builder().build());
 
-        // Execução do método e verificação da exceção
-        CurrencyException exception = catchThrowableOfType(
-                () -> currencyService.create(CurrencyRequest.builder().build()),
-                CurrencyException.class);
+        CurrencyRequest request = CurrencyRequest.builder().build();
+
+        CurrencyException exception = catchThrowableOfType(() -> currencyService.create(request), CurrencyException.class);
+
         verify(currencyRepository, times(1)).findByName(any());
         assertThat(exception).isNotNull();
         assertThat(exception.getMessage()).isEqualTo("Coin already exists");
@@ -118,7 +119,7 @@ public class CurrencyServiceUnitTest {
                 .build();
         ConvertCurrencyResponse response = currencyService.convert(request);
         verify(awesomeClient, never()).get(anyString());
-        assertThat(response.getAmount()).isEqualTo(new BigDecimal("100"));
+        assertThat(response.amount()).isEqualTo(new BigDecimal("100"));
     }
 
     @Test
@@ -139,24 +140,24 @@ public class CurrencyServiceUnitTest {
                 .build();
         ConvertCurrencyResponse response = currencyService.convert(request);
         verify(awesomeClient, times(1)).get(anyString());
-        assertThat(response.getAmount()).isEqualTo(new BigDecimal("50.00"));
+        assertThat(response.amount()).isEqualTo(new BigDecimal("50.00"));
     }
 
     @Test
     void testConvertCurrencyWhenCurrencyNotFoundThrowCoinNotFoundException() {
         // Configuração do Mock do Repository e do AwesomeClient
         when(currencyRepository.findByName(any())).thenReturn(null);
-        String json = "{\"status\":404,\"code\":\"CoinNotExists\",\"message\":\"moeda nao encontrada EU-USD\"}";
-        when(awesomeClient.get(anyString())).thenThrow(new RuntimeException(json));
+        when(awesomeClient.get(anyString())).thenThrow(new NullPointerException());
 
         // Execução do método e verificação da exceção
-        CoinNotFoundException exception = catchThrowableOfType(
-                () -> currencyService.convert(new ConvertCurrencyRequest()),
-                CoinNotFoundException.class);
+
+        ConvertCurrencyRequest request = ConvertCurrencyRequest.builder().build();
+
+        CoinNotFoundException exception = catchThrowableOfType(() -> currencyService.convert(request), CoinNotFoundException.class);
 
         verify(awesomeClient, times(1)).get(anyString());
         assertThat(exception).isNotNull();
         assertThat(exception.getMessage())
-                .isEqualTo("Error while getting response from Awesome API: " + json);
+                .isEqualTo("Error while getting response from Awesome API");
     }
 }
