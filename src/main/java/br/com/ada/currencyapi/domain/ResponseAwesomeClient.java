@@ -1,18 +1,23 @@
 package br.com.ada.currencyapi.domain;
 
-
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
 
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class ResponseAwesomeClient {
+public record ResponseAwesomeClient(
+        String ask,
+        String code,
+        String codein,
+        String name,
+        String high,
+        String low,
+        String varBid,
+        String pctChange,
+        String bid,
+        String timestamp,
+        @JsonProperty("create_date") String createDate) {
+
     @Override
     public String toString() {
-        return "conversionReturnData{" +
+        return "ResponseAwesomeClient{" +
                 "ask='" + ask + '\'' +
                 ", code='" + code + '\'' +
                 ", codein='" + codein + '\'' +
@@ -23,30 +28,7 @@ public class ResponseAwesomeClient {
                 ", pctChange='" + pctChange + '\'' +
                 ", bid='" + bid + '\'' +
                 ", timestamp='" + timestamp + '\'' +
-                ", create_date='" + createDate + '\'' +
+                ", createDate='" + createDate + '\'' +
                 '}';
     }
-
-    private String code;
-
-    private String codein;
-
-    private String name;
-
-    private String high;
-
-    private String low;
-
-    private String varBid;
-
-    private String pctChange;
-
-    private String bid;
-
-    private String ask;
-
-    private String timestamp;
-
-    @JsonProperty("create_date")
-    private String createDate;
 }
