@@ -1,7 +1,10 @@
 package br.com.ada.currencyapi.service;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import br.com.ada.currencyapi.client.AwesomeClient;
 import br.com.ada.currencyapi.domain.ConvertCurrencyRequest;
